@@ -1,17 +1,15 @@
-import os, subprocess
-import ait as autoit
+import subprocess, time
+import pyautogui as pg
 from steam_guard import getCode
-from parce_log_pass import getLogPass
+
+win_width = pg.size()[0]
+win_height = pg.size()[1]
+accept_click = (win_width / 2, win_height / 2 - 25)
 
 # Example
-path_to_steam = '"C:/Program Files (x86)/Steam/steam.exe" -login ilias_122 Sashok5544'
 
-# os.startfile(path_to_steam)
-# print('1')
-
-subprocess.Popen([r'C:\Program Files (x86)\Steam\steam.exe', '-login', 'ilias_122', 'Sashok5544'])
-
-# autoit.win_wait("Steam Guard")
-# autoit.win_activate("Steam Guard")
-# autoit.win_wait_active("Steam Guard")
-# autoit.send(getCode('C:\\Users\\sdezh\\PycharmProjects\\Obl1Que_Auto_Farm\\76561198191656163.maFile'))
+proc = subprocess.Popen([r'C:\Program Files (x86)\Steam\steam.exe', '-login', 'makfa10', 'Sashok5544'])
+code = getCode(r'C:\Users\sdezh\PycharmProjects\Obl1Que_Auto_Farm\76561198202337078.maFile')
+time.sleep(4)
+pg.click(accept_click)
+pg.write(code)
