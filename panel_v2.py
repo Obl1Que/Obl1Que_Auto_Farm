@@ -1,7 +1,6 @@
 import os, subprocess
 from PyQt5 import QtCore, QtGui, QtWidgets
 import parce_log_pass as plp
-from pathlib import Path
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -9,6 +8,8 @@ class Ui_MainWindow(object):
         MainWindow.resize(800, 250)
         MainWindow.setMinimumSize(QtCore.QSize(800, 250))
         MainWindow.setMaximumSize(QtCore.QSize(800, 250))
+
+        self.itemsToLaunch = []
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -41,6 +42,7 @@ class Ui_MainWindow(object):
         self.CheckAccountsF()
         self.AddmaFilesF()
         self.AddLogPassF()
+        self.StartFarmingF()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -69,3 +71,17 @@ class Ui_MainWindow(object):
     def openFile(self):
         os.system(r'C:\Users\sdezh\PycharmProjects\Obl1Que_Auto_Farm\accounts\log_pass.txt')
         self.ShowAccounts()
+
+    def StartFarmingF(self):
+        self.listWidget.itemClicked.connect(self.launchCSGO)
+
+    def launchCSGO(self, clItem):
+        if clItem.text() not in self.itemsToLaunch:
+            self.itemsToLaunch.append(clItem.text())
+            clItem.setBackground(QtGui.QColor(207, 255, 254))
+
+        else:
+            self.itemsToLaunch.remove(clItem.text())
+            clItem.setBackground(QtGui.QColor(255, 255, 255))
+
+        print(self.itemsToLaunch)
