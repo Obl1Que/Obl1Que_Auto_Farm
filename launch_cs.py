@@ -1,3 +1,5 @@
+import os
+import json
 import pyautogui as pg
 import time
 import subprocess
@@ -6,22 +8,73 @@ from steam_guard import getCode
 win_size = (pg.size()[0], pg.size()[1])
 cs_in_row = win_size[0] // 480
 px_between_cs = round((win_size[0] - (480 * cs_in_row)) / (cs_in_row - 1))
-accept_click = (win_size[0] / 2, win_size[1] / 2 - 25)
+accept_click = (win_size[0] / 2, win_size[1] / 2 - 35)
 
 cs_windows = {}
 
-def launchCs(login, password, guardCode, posX, posY):
-    proc = subprocess.Popen([r'C:\Program Files (x86)\Steam\steam.exe', '-login', str(login), str(password), '-applaunch', '730', '-low',
-                             '-nohltv', '-nosound', '-novid', '-window', '-w', '640', '-h', '480', '+exec', 'autoexec.cfg', '-x', str(posX), '-y', str(posY), '+connect', 'ipadress', '+password', 'pass'])
+def parce_l_p(str):
+    return str.split(':')
 
-    time.sleep(5)
-    pg.click(accept_click)
-    pg.write(guardCode)
+def startCS(dict_css):
+    counterX = 0
+    counterY = 0
 
-    cs_windows[login] = ('launch', posX, posY)
+    for acc in dict_css:
+        if counterX == cs_in_row:
+            counterX = 0
+            counterY += 1
 
-code = getCode(r'C:\Users\sdezh\PycharmProjects\Obl1Que_Auto_Farm\accounts\maFiles\76561197777777777.maFile')
+        login = dict_css[acc]["login"]
+        password = dict_css[acc]["password"]
 
-launchCs('login', 'password', code, 100, 100)
-print(code)
-print(cs_windows)
+        subprocess.Popen([r'C:\Program Files (x86)\Steam\steam.exe','-login',str(login),str(password),'-applaunch','730','-low','-nohltv','-nosound','-novid','-window','-w','640','-h','480','+exec''autoexec.cfg','-x',str(counterX * (480 + px_between_cs)),'-y',str(counterY * 360),'+connect','IP_ADRESS','+password','PASSWORD'])
+
+        time.sleep(8)
+        code = getCode(dict_css[acc]["shared_secret"])
+        pg.moveTo(accept_click[0] + 10, accept_click[1], duration = 0.2)
+        pg.click(accept_click)
+        pg.write(code)
+        cs_windows[login] = ('launch', counterX * (480 + px_between_cs), counterY * 360)
+        time.sleep(8)
+        counterX += 1
+
+    print(cs_windows)
+def check_maFile(acc_login):
+    direc = 'C:\\Users\\sdezh\\PycharmProjects\\Obl1Que_Auto_Farm\\accounts\\maFiles'
+
+    for i in os.listdir(direc):
+        if not i.endswith(".txt"):
+            j = json.loads(open(direc + '\\' + i, 'r').read())["account_name"]
+
+            if acc_login == j:
+                return True, json.loads(open(direc + '\\' + i, 'r').read())["shared_secret"]
+
+    return False, 'None'
+
+def launchCs(mass_log_pass):
+    go_start = {}
+    ngo_start = {}
+
+    for i in mass_log_pass:
+        acc_login = parce_l_p(i)[0]
+        acc_password = parce_l_p(i)[1]
+
+        if check_maFile(acc_login)[0]:
+            is_maFale = check_maFile(acc_login)[0]
+            shared_secret = check_maFile(acc_login)[1]
+
+            go_start[acc_login] = {'login': acc_login,
+                       'password': acc_password,
+                       'shared_secret': shared_secret,
+                       'is_maFile': is_maFale}
+
+        else:
+            is_maFale = check_maFile(acc_login)[0]
+            shared_secret = check_maFile(acc_login)[1]
+
+            ngo_start[i] = {'login': acc_login,
+                           'password': acc_password,
+                           'shared_secret': shared_secret,
+                           'is_maFile': is_maFale}
+
+    startCS(go_start)

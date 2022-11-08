@@ -1,6 +1,7 @@
 import os, subprocess
 from PyQt5 import QtCore, QtGui, QtWidgets
 import parce_log_pass as plp
+import launch_cs as lcs
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -50,8 +51,9 @@ class Ui_MainWindow(object):
         self.CheckAccountsF()
         self.AddmaFilesF()
         self.AddLogPassF()
-        self.StartFarmingF()
+        self.chooseItems()
         self.AddServersF()
+        self.StartFarmingF()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -79,28 +81,33 @@ class Ui_MainWindow(object):
 
     def openFile(self, path):
         os.system(path)
-        self.ShowAccounts(path, 'mass')
 
     def openFolder(self, path):
         subprocess.Popen(path)
 
-    def StartFarmingF(self):
-        self.listWidget.itemClicked.connect(self.launchCSGO)
+    def chooseItems(self):
+        self.listWidget.itemClicked.connect(self.choosenItems)
 
-    def launchCSGO(self, clItem):
+    def choosenItems(self, clItem):
         if ':27' not in clItem.text():
             if clItem.text() not in self.itemsToLaunch:
                 self.itemsToLaunch.append(clItem.text())
-                clItem.setBackground(QtGui.QColor(207, 255, 254))
+                clItem.setBackground(QtGui.QColor(235, 242, 255))
 
             else:
                 self.itemsToLaunch.remove(clItem.text())
                 clItem.setBackground(QtGui.QColor(255, 255, 255))
 
-        self.confOut(f'Выбраны аккаунты для запуска: {self.itemsToLaunch}')
+            self.confOut(f'Выбраны аккаунты для запуска: {self.itemsToLaunch}')
 
     def AddServersF(self):
         self.AddServers.clicked.connect(lambda: self.openFile(r'C:\Users\sdezh\PycharmProjects\Obl1Que_Auto_Farm\accounts\servers.txt'))
 
     def confOut(self, str):
         self.confInfo.addItem(str)
+
+    def StartFarmingF(self):
+        self.StartFarming.clicked.connect(lambda: self.launchCSGO())
+
+    def launchCSGO(self):
+        lcs.launchCs(self.itemsToLaunch)

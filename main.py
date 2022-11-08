@@ -1,9 +1,5 @@
-import subprocess, time
-import pyautogui as pg
 from panel_v2 import *
-from steam_guard import getCode
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWinExtras import QtWin
+from PyQt5 import QtGui, QtWidgets
 import sys
 
 if __name__ == '__main__':
