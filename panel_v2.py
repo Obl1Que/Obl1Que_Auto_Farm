@@ -5,9 +5,9 @@ import parce_log_pass as plp
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 250)
-        MainWindow.setMinimumSize(QtCore.QSize(800, 250))
-        MainWindow.setMaximumSize(QtCore.QSize(800, 250))
+        MainWindow.resize(800, 500)
+        MainWindow.setMinimumSize(QtCore.QSize(800, 500))
+        MainWindow.setMaximumSize(QtCore.QSize(800, 500))
 
         self.itemsToLaunch = []
 
@@ -30,9 +30,17 @@ class Ui_MainWindow(object):
         self.StartFarming.setGeometry(QtCore.QRect(10, 190, 400, 50))
         self.StartFarming.setObjectName("StartFarming")
 
+        self.AddServers = QtWidgets.QPushButton(self.centralwidget)
+        self.AddServers.setGeometry(QtCore.QRect(10, 250, 400, 50))
+        self.AddServers.setObjectName("AddServers")
+
         self.listWidget = QtWidgets.QListWidget(self.centralwidget)
         self.listWidget.setGeometry(QtCore.QRect(430, 10, 350, 230))
         self.listWidget.setObjectName("listWidget")
+
+        self.confInfo = QtWidgets.QListWidget(self.centralwidget)
+        self.confInfo.setGeometry(QtCore.QRect(10, 309, 770, 181))
+        self.confInfo.setObjectName("confInfo")
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -43,6 +51,7 @@ class Ui_MainWindow(object):
         self.AddmaFilesF()
         self.AddLogPassF()
         self.StartFarmingF()
+        self.AddServersF()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -51,37 +60,47 @@ class Ui_MainWindow(object):
         self.AddmaFiles.setText(_translate("MainWindow", "Add maFiles"))
         self.AddLogPass.setText(_translate("MainWindow", "Add LOGIN:PASSWORD"))
         self.StartFarming.setText(_translate("MainWindow", "Start Farming"))
+        self.AddServers.setText(_translate("MainWindow", "Add servers"))
 
     def CheckAccountsF(self):
-        self.CheckAccounts.clicked.connect(lambda: self.ShowAccounts())
+        self.CheckAccounts.clicked.connect(lambda: self.ShowAccounts('./accounts/log_pass.txt', 'mass'))
 
-    def ShowAccounts(self):
+    def ShowAccounts(self, path, typeOpen):
+        self.itemsToLaunch.clear()
         self.listWidget.clear()
-        self.listWidget.addItems(plp.getLogPass('./accounts/log_pass.txt', 'mass'))
+        self.listWidget.addItems(plp.getLogPass(path, typeOpen))
+        self.confOut(f'Показаны аккаунты: {plp.getLogPass(path, typeOpen)}')
 
     def AddmaFilesF(self):
-        self.AddmaFiles.clicked.connect(lambda: self.OpenFolder())
-
-    def OpenFolder(self):
-        subprocess.Popen(r'explorer /select,"C:\Users\sdezh\PycharmProjects\Obl1Que_Auto_Farm\accounts\maFiles\_test.txt"')
+        self.AddmaFiles.clicked.connect(lambda: self.openFolder(r'explorer /select,"C:\Users\sdezh\PycharmProjects\Obl1Que_Auto_Farm\accounts\maFiles\_test.txt"'))
 
     def AddLogPassF(self):
-        self.AddLogPass.clicked.connect(lambda: self.openFile())
+        self.AddLogPass.clicked.connect(lambda: self.openFile(r'C:\Users\sdezh\PycharmProjects\Obl1Que_Auto_Farm\accounts\log_pass.txt'))
 
-    def openFile(self):
-        os.system(r'C:\Users\sdezh\PycharmProjects\Obl1Que_Auto_Farm\accounts\log_pass.txt')
-        self.ShowAccounts()
+    def openFile(self, path):
+        os.system(path)
+        self.ShowAccounts(path, 'mass')
+
+    def openFolder(self, path):
+        subprocess.Popen(path)
 
     def StartFarmingF(self):
         self.listWidget.itemClicked.connect(self.launchCSGO)
 
     def launchCSGO(self, clItem):
-        if clItem.text() not in self.itemsToLaunch:
-            self.itemsToLaunch.append(clItem.text())
-            clItem.setBackground(QtGui.QColor(207, 255, 254))
+        if ':27' not in clItem.text():
+            if clItem.text() not in self.itemsToLaunch:
+                self.itemsToLaunch.append(clItem.text())
+                clItem.setBackground(QtGui.QColor(207, 255, 254))
 
-        else:
-            self.itemsToLaunch.remove(clItem.text())
-            clItem.setBackground(QtGui.QColor(255, 255, 255))
+            else:
+                self.itemsToLaunch.remove(clItem.text())
+                clItem.setBackground(QtGui.QColor(255, 255, 255))
 
-        print(self.itemsToLaunch)
+        self.confOut(f'Выбраны аккаунты для запуска: {self.itemsToLaunch}')
+
+    def AddServersF(self):
+        self.AddServers.clicked.connect(lambda: self.openFile(r'C:\Users\sdezh\PycharmProjects\Obl1Que_Auto_Farm\accounts\servers.txt'))
+
+    def confOut(self, str):
+        self.confInfo.addItem(str)
