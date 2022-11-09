@@ -1,6 +1,4 @@
 import os, subprocess
-import time
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 import parce_log_pass as plp
 import launch_cs as lcs
