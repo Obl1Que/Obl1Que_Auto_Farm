@@ -1,4 +1,6 @@
 import os, subprocess
+import time
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 import parce_log_pass as plp
 import launch_cs as lcs
@@ -101,6 +103,7 @@ class Ui_MainWindow(object):
             self.confOut(f'Выбраны аккаунты для запуска: {self.itemsToLaunch}')
 
     def AddServersF(self):
+        self.AddServers.clicked.connect(lambda: self.confOut("Данная функция в разработке!"))
         self.AddServers.clicked.connect(lambda: self.openFile(r'C:\Users\sdezh\PycharmProjects\Obl1Que_Auto_Farm\accounts\servers.txt'))
 
     def confOut(self, str):

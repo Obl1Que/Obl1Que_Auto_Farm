@@ -6,8 +6,8 @@ import subprocess
 from steam_guard import getCode
 
 win_size = (pg.size()[0], pg.size()[1])
-cs_in_row = win_size[0] // 480
-px_between_cs = round((win_size[0] - (480 * cs_in_row)) / (cs_in_row - 1))
+cs_in_row = win_size[0] // 400
+px_between_cs = round((win_size[0] - (400 * cs_in_row)) / (cs_in_row - 1))
 accept_click = (win_size[0] / 2, win_size[1] / 2 - 35)
 
 cs_windows = {}
@@ -27,20 +27,19 @@ def startCS(dict_css):
         login = dict_css[acc]["login"]
         password = dict_css[acc]["password"]
 
-        subprocess.Popen([r'C:\Program Files (x86)\Steam\steam.exe','-login',str(login),str(password),'-applaunch','730','-low','-nohltv','-nosound','-novid','-window','-w','640','-h','480','+exec''autoexec.cfg','-x',str(counterX * (480 + px_between_cs)),'-y',str(counterY * 360),'+connect','IP_ADRESS','+password','PASSWORD'])
+        subprocess.Popen([r'C:\Program Files (x86)\Steam\steam.exe','-login',str(login),str(password),'-applaunch','730','-low','-nohltv','-nosound','-novid','-window','-w','640','-h','480','+exec''autoexec.cfg', '+connect', '-x',str(counterX * (400 + px_between_cs)),'-y',str(counterY * 300)])
 
         time.sleep(8)
         code = getCode(dict_css[acc]["shared_secret"])
-        pg.moveTo(accept_click[0] + 10, accept_click[1], duration = 0.2)
         pg.click(accept_click)
+        time.sleep(0.2)
         pg.write(code)
-        cs_windows[login] = ('launch', counterX * (480 + px_between_cs), counterY * 360)
+        cs_windows[login] = ('launch', counterX * (400 + px_between_cs), counterY * 300)
         time.sleep(8)
         counterX += 1
 
-    print(cs_windows)
 def check_maFile(acc_login):
-    direc = 'C:\\Users\\sdezh\\PycharmProjects\\Obl1Que_Auto_Farm\\accounts\\maFiles'
+    direc = "accounts/maFiles"
 
     for i in os.listdir(direc):
         if not i.endswith(".txt"):
