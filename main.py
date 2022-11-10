@@ -1,12 +1,10 @@
 import os
-
-os.system("pip install -r requirements.txt")
-
 from panel_v2 import *
 from PyQt5 import QtGui, QtWidgets
 import sys, ctypes
 
-if __name__ == '__main__' and ctypes.windll.shell32.IsUserAnAdmin():
+if ctypes.windll.shell32.IsUserAnAdmin():
+    os.system("pip install -r requirements.txt")
     app = QtWidgets.QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon('./img/icon.png'))
 
