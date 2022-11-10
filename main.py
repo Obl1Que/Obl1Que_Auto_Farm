@@ -1,6 +1,6 @@
 import os
 
-os.system(os.path.abspath("req.py"))
+os.system("pip install -r requirements.txt")
 
 from panel_v2 import *
 from PyQt5 import QtGui, QtWidgets
