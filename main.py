@@ -1,3 +1,7 @@
+import os
+
+os.system(os.path.abspath("req.py"))
+
 from panel_v2 import *
 from PyQt5 import QtGui, QtWidgets
 import sys, ctypes
