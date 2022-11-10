@@ -65,7 +65,7 @@ class Ui_MainWindow(object):
         self.AddServers.setText(_translate("MainWindow", "Add servers"))
 
     def CheckAccountsF(self):
-        self.CheckAccounts.clicked.connect(lambda: self.ShowAccounts('./accounts/log_pass.txt', 'mass'))
+        self.CheckAccounts.clicked.connect(lambda: self.ShowAccounts(os.path.abspath('accounts/log_pass.txt'), 'mass'))
 
     def ShowAccounts(self, path, typeOpen):
         self.itemsToLaunch.clear()
@@ -74,10 +74,12 @@ class Ui_MainWindow(object):
         self.confOut(f'Показаны аккаунты: {plp.getLogPass(path, typeOpen)}')
 
     def AddmaFilesF(self):
-        self.AddmaFiles.clicked.connect(lambda: self.openFolder(r'explorer /select,"C:\Users\sdezh\PycharmProjects\Obl1Que_Auto_Farm\accounts\maFiles\_test.txt"'))
+        path = os.path.abspath('accounts/maFiles/_test.txt')
+        self.AddmaFiles.clicked.connect(lambda: self.openFolder(rf'explorer /select,{path}'))
 
     def AddLogPassF(self):
-        self.AddLogPass.clicked.connect(lambda: self.openFile(r'C:\Users\sdezh\PycharmProjects\Obl1Que_Auto_Farm\accounts\log_pass.txt'))
+        path = os.path.abspath('accounts/log_pass.txt')
+        self.AddLogPass.clicked.connect(lambda: self.openFile(path))
 
     def openFile(self, path):
         os.system(path)
@@ -101,8 +103,9 @@ class Ui_MainWindow(object):
             self.confOut(f'Выбраны аккаунты для запуска: {self.itemsToLaunch}')
 
     def AddServersF(self):
+        path = os.path.abspath("accounts/servers.txt")
         self.AddServers.clicked.connect(lambda: self.confOut("Данная функция в разработке!"))
-        self.AddServers.clicked.connect(lambda: self.openFile(r'C:\Users\sdezh\PycharmProjects\Obl1Que_Auto_Farm\accounts\servers.txt'))
+        self.AddServers.clicked.connect(lambda: self.openFile(path))
 
     def confOut(self, str):
         self.confInfo.addItem(str)
