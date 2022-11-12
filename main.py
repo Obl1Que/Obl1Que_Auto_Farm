@@ -3,6 +3,8 @@ try:
     from PyQt5 import QtGui, QtWidgets
     import sys, ctypes, os, py_win_keyboard_layout
 
+
+
     if ctypes.windll.shell32.IsUserAnAdmin():
         os.system("pip install -r requirements.txt")
         app = QtWidgets.QApplication(sys.argv)
