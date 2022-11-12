@@ -114,4 +114,4 @@ class Ui_MainWindow(object):
         self.StartFarming.clicked.connect(lambda: self.launchCSGO())
 
     def launchCSGO(self):
-        lcs.launchCs(self.itemsToLaunch)
+        ngo = lcs.launchCs(self.itemsToLaunch)

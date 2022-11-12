@@ -31,8 +31,7 @@ def startCS(dict_css):
 
         time.sleep(8)
         code = getCode(dict_css[acc]["shared_secret"])
-        pg.click(accept_click, duration = 0.25)
-        pg.moveTo(accept_click[0] - 5, accept_click[1], duration = 0.25)
+        pg.click(accept_click)
         pg.write(code)
         cs_windows[login] = ('launch', counterX * (400 + px_between_cs), counterY * 300)
         time.sleep(8)
@@ -77,3 +76,4 @@ def launchCs(mass_log_pass):
                            'is_maFile': is_maFale}
 
     startCS(go_start)
+    return ngo_start
