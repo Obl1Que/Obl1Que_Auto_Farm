@@ -70,12 +70,19 @@ class Ui_MainWindow(object):
     def ShowAccounts(self, path, typeOpen):
         self.itemsToLaunch.clear()
         self.listWidget.clear()
-        self.listWidget.addItems(plp.getLogPass(path, typeOpen))
+
+        for _ in plp.getLogPass(path, typeOpen):
+            self.listWidget.addItem((_))
+            if not lcs.check_maFile(plp.parceLogPass(_)[0])[0]:
+                self.listWidget.item(self.listWidget.count() - 1).setBackground(QtGui.QColor(255, 140, 140, 255))
+
         self.confOut(f'Показаны аккаунты: {plp.getLogPass(path, typeOpen)}')
+        self.confInfo.scrollToBottom()
 
     def AddmaFilesF(self):
         path = os.path.abspath('accounts/maFiles/_test.txt')
         self.AddmaFiles.clicked.connect(lambda: self.openFolder(rf'explorer /select,{path}'))
+        self.AddmaFiles.clicked.connect(lambda: self.ShowAccounts(os.path.abspath('accounts/log_pass.txt'), 'mass'))
 
     def AddLogPassF(self):
         path = os.path.abspath('accounts/log_pass.txt')
@@ -85,27 +92,29 @@ class Ui_MainWindow(object):
         os.system(path)
 
     def openFolder(self, path):
-        subprocess.Popen(path)
+        folder = subprocess.Popen(path)
 
     def chooseItems(self):
         self.listWidget.itemClicked.connect(self.choosenItems)
 
     def choosenItems(self, clItem):
-        if ':27' not in clItem.text():
+        if ':27' not in clItem.text() and clItem.background().color().getRgb() != (255, 140, 140, 255):
             if clItem.text() not in self.itemsToLaunch:
                 self.itemsToLaunch.append(clItem.text())
-                clItem.setBackground(QtGui.QColor(235, 242, 255))
+                clItem.setBackground(QtGui.QColor(235, 242, 255, 255))
 
             else:
                 self.itemsToLaunch.remove(clItem.text())
-                clItem.setBackground(QtGui.QColor(255, 255, 255))
+                clItem.setBackground(QtGui.QColor(255, 255, 255, 255))
 
             self.confOut(f'Выбраны аккаунты для запуска: {self.itemsToLaunch}')
+            self.confInfo.scrollToBottom()
 
     def AddServersF(self):
         path = os.path.abspath("accounts/servers.txt")
         self.AddServers.clicked.connect(lambda: self.confOut("Данная функция в разработке!"))
         self.AddServers.clicked.connect(lambda: self.openFile(path))
+        self.confInfo.scrollToBottom()
 
     def confOut(self, str):
         self.confInfo.addItem(str)
@@ -115,3 +124,8 @@ class Ui_MainWindow(object):
 
     def launchCSGO(self):
         ngo = lcs.launchCs(self.itemsToLaunch)
+
+        for i in range(self.listWidget.count()):
+            for j in ngo:
+                if self.listWidget.item(i).text() == j:
+                    self.listWidget.item(i).setBackground(QtGui.QColor(255, 140, 140, 255))
