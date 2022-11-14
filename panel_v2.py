@@ -123,9 +123,14 @@ class Ui_MainWindow(object):
         self.StartFarming.clicked.connect(lambda: self.launchCSGO())
 
     def launchCSGO(self):
-        ngo = lcs.launchCs(self.itemsToLaunch)
+        start = lcs.launchCs(self.itemsToLaunch)
+        go_start = start[0]
+        not_go_start = start[1]
 
         for i in range(self.listWidget.count()):
-            for j in ngo:
-                if self.listWidget.item(i).text() == j:
+            for j in not_go_start:
+                if plp.parceLogPass(self.listWidget.item(i).text())[0] == j:
                     self.listWidget.item(i).setBackground(QtGui.QColor(255, 140, 140, 255))
+            for k in go_start:
+                if plp.parceLogPass(self.listWidget.item(i).text())[0] == k:
+                    self.listWidget.item(i).setBackground(QtGui.QColor(46, 252, 142, 255))

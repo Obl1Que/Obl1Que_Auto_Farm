@@ -8,10 +8,10 @@ try:
         import sys, py_win_keyboard_layout
 
         app = QtWidgets.QApplication(sys.argv)
-        app.setWindowIcon(QtGui.QIcon('./img/icon.png'))
+        app.setWindowIcon(QtGui.QIcon('img/icon.png'))
 
         MainWindow = QtWidgets.QMainWindow()
-        MainWindow.setWindowIcon(QtGui.QIcon('./img/icon.png'))
+        MainWindow.setWindowIcon(QtGui.QIcon('img/icon.png'))
 
         ui = Ui_MainWindow()
         ui.setupUi(MainWindow)

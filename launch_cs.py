@@ -32,6 +32,7 @@ def startCS(dict_css):
         time.sleep(8)
         code = getCode(dict_css[acc]["shared_secret"])
         pg.click(accept_click)
+        pg.moveTo(accept_click[0] + 10, accept_click[1])
         pg.write(code)
         cs_windows[login] = ('launch', counterX * (400 + px_between_cs), counterY * 300)
         time.sleep(8)
@@ -62,18 +63,18 @@ def launchCs(mass_log_pass):
             shared_secret = check_maFile(acc_login)[1]
 
             go_start[acc_login] = {'login': acc_login,
-                       'password': acc_password,
-                       'shared_secret': shared_secret,
-                       'is_maFile': is_maFale}
+                                    'password': acc_password,
+                                    'shared_secret': shared_secret,
+                                    'is_maFile': is_maFale}
 
         else:
             is_maFale = check_maFile(acc_login)[0]
             shared_secret = check_maFile(acc_login)[1]
 
             ngo_start[i] = {'login': acc_login,
-                           'password': acc_password,
-                           'shared_secret': shared_secret,
-                           'is_maFile': is_maFale}
+                                    'password': acc_password,
+                                    'shared_secret': shared_secret,
+                                    'is_maFile': is_maFale}
 
     startCS(go_start)
-    return ngo_start
+    return go_start, ngo_start
