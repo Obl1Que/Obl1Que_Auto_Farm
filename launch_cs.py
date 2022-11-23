@@ -10,14 +10,13 @@ cs_in_row = win_size[0] // 400
 px_between_cs = round((win_size[0] - (400 * cs_in_row)) / (cs_in_row - 1))
 accept_click = (win_size[0] / 2, win_size[1] / 2 - 35)
 
-cs_windows = {}
-
 def parce_l_p(str):
     return str.split(':')
 
 def startCS(dict_css):
     counterX = 0
     counterY = 0
+    new_d = {}
 
     for acc in dict_css:
         if counterX == cs_in_row:
@@ -34,7 +33,7 @@ def startCS(dict_css):
         pg.click(accept_click)
         pg.moveTo(accept_click[0] + 10, accept_click[1])
         pg.write(code)
-        cs_windows[login] = ('launch', counterX * (400 + px_between_cs), counterY * 300)
+        new_d[login] = ('launch', counterX * (400 + px_between_cs), counterY * 300)
         time.sleep(8)
         counterX += 1
 
@@ -72,9 +71,9 @@ def launchCs(mass_log_pass):
             shared_secret = check_maFile(acc_login)[1]
 
             ngo_start[i] = {'login': acc_login,
-                                    'password': acc_password,
-                                    'shared_secret': shared_secret,
-                                    'is_maFile': is_maFale}
+                            'password': acc_password,
+                            'shared_secret': shared_secret,
+                            'is_maFile': is_maFale}
 
     startCS(go_start)
     return go_start, ngo_start

@@ -2,6 +2,7 @@ import os, subprocess
 from PyQt5 import QtCore, QtGui, QtWidgets
 import parce_log_pass as plp
 import launch_cs as lcs
+import json
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -134,3 +135,6 @@ class Ui_MainWindow(object):
             for k in go_start:
                 if plp.parceLogPass(self.listWidget.item(i).text())[0] == k:
                     self.listWidget.item(i).setBackground(QtGui.QColor(46, 252, 142, 255))
+
+        win_opened = open('win_opened.txt', 'w')
+        win_opened.write(json.dumps(start[0], indent = 4))
