@@ -99,7 +99,7 @@ class Ui_MainWindow(object):
         self.listWidget.itemClicked.connect(self.choosenItems)
 
     def choosenItems(self, clItem):
-        if ':27' not in clItem.text() and clItem.background().color().getRgb() != (255, 140, 140, 255):
+        if clItem.background().color().getRgb() != (255, 140, 140, 255) and clItem.background().color().getRgb() != (46, 252, 142, 255):
             if clItem.text() not in self.itemsToLaunch:
                 self.itemsToLaunch.append(clItem.text())
                 clItem.setBackground(QtGui.QColor(235, 242, 255, 255))
@@ -110,6 +110,10 @@ class Ui_MainWindow(object):
 
             self.confOut(f'Выбраны аккаунты для запуска: {self.itemsToLaunch}')
             self.confInfo.scrollToBottom()
+
+        elif clItem.background().color().getRgb() == (46, 252, 142, 255):
+            self.CloseWin(plp.parceLogPass(clItem.text())[0])
+            clItem.setBackground(QtGui.QColor(255, 255, 255, 255))
 
     def AddServersF(self):
         path = os.path.abspath("accounts/servers.txt")
@@ -123,8 +127,19 @@ class Ui_MainWindow(object):
     def StartFarmingF(self):
         self.StartFarming.clicked.connect(lambda: self.launchCSGO())
 
+    def CloseWin(self, login):
+        file = open('win_opened.json', 'r')
+        req = json.load(file)
+
+        for acc in req.items():
+            if acc[0] == login:
+                print(acc)
+
+        file.close()
+
     def launchCSGO(self):
         start = lcs.launchCs(self.itemsToLaunch)
+        self.itemsToLaunch.clear()
         go_start = start[0]
         not_go_start = start[1]
 
@@ -135,6 +150,10 @@ class Ui_MainWindow(object):
             for k in go_start:
                 if plp.parceLogPass(self.listWidget.item(i).text())[0] == k:
                     self.listWidget.item(i).setBackground(QtGui.QColor(46, 252, 142, 255))
+        win_opened = open('win_opened.json', 'w')
+        win_opened.write(json.dumps(start[0]))
+        win_opened.close()
 
-        win_opened = open('win_opened.txt', 'w')
-        win_opened.write(json.dumps(start[0], indent = 4))
+        # file = open('win_opened.json', 'r')
+        # print(json.loads(file.read()))
+        # file.close()

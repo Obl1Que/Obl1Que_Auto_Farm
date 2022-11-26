@@ -26,16 +26,18 @@ def startCS(dict_css):
         login = dict_css[acc]["login"]
         password = dict_css[acc]["password"]
 
-        subprocess.Popen([r'C:\Program Files (x86)\Steam\steam.exe','-login',str(login),str(password),'-applaunch','730','-low','-nohltv','-nosound','-novid','-window','-w','640','-h','480','+exec''autoexec.cfg', '+connect', '-x',str(counterX * (400 + px_between_cs)),'-y',str(counterY * 300)])
+        # subprocess.Popen([r'C:\Program Files (x86)\Steam\steam.exe','-login',str(login),str(password),'-applaunch','730','-low','-nohltv','-nosound','-novid','-window','-w','640','-h','480','+exec''autoexec.cfg', '+connect', '-x',str(counterX * (400 + px_between_cs)),'-y',str(counterY * 300)])
 
-        time.sleep(8)
-        code = getCode(dict_css[acc]["shared_secret"])
-        pg.click(accept_click)
-        pg.moveTo(accept_click[0] + 10, accept_click[1])
-        pg.write(code)
-        new_d[login] = ('launch', counterX * (400 + px_between_cs), counterY * 300)
-        time.sleep(8)
+        # time.sleep(8)
+        # code = getCode(dict_css[acc]["shared_secret"])
+        # pg.click(accept_click)
+        # pg.moveTo(accept_click[0] + 10, accept_click[1])
+        # pg.write(code)
+        new_d[login] = [counterX * (400 + px_between_cs), counterY * 300]
+        # time.sleep(8)
         counterX += 1
+
+    return new_d
 
 def check_maFile(acc_login):
     direc = "accounts/maFiles"
@@ -75,5 +77,5 @@ def launchCs(mass_log_pass):
                             'shared_secret': shared_secret,
                             'is_maFile': is_maFale}
 
-    startCS(go_start)
-    return go_start, ngo_start
+    win_cs = startCS(go_start)
+    return win_cs, ngo_start
