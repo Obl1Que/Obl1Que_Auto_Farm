@@ -128,14 +128,19 @@ class Ui_MainWindow(object):
         self.StartFarming.clicked.connect(lambda: self.launchCSGO())
 
     def CloseWin(self, login):
-        file = open('win_opened.json', 'r')
-        req = json.load(file)
-
-        for acc in req.items():
-            if acc[0] == login:
-                print(acc)
-
+        file = open('win_opened.json')
+        all_req = json.load(file)
         file.close()
+
+        for acc in all_req.items():
+            if acc[0] == login:
+                file = open('win_opened.json')
+                new_req = json.load(file)
+                file.close()
+                file = open('win_opened.json', 'w')
+                new_req.pop(acc[0])
+                file.write(json.dumps(new_req))
+                file.close()
 
     def launchCSGO(self):
         start = lcs.launchCs(self.itemsToLaunch)
